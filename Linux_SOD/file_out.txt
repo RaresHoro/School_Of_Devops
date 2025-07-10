@@ -1,0 +1,13 @@
+### Creating work directory and the .txt files
+### Directory work  created
+### Page1.txt created
+### Page2.txt created
+### Page3.txt created
+### Page4.txt created
+### Page5.txt created
+### Reading operation start time
+###  Counting occurrences of the word 'engineer' in all files
+Occurrences of 'engineer': 8
+### Reading operation  end time
+### Calculating elapsed time
+Time taken: .002826796 seconds
