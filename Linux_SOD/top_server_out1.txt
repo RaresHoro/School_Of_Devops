@@ -1,0 +1,27 @@
+[2025-07-10 13:36:40] ### Script start
+[2025-07-10 13:36:40] ### Searching for a free port (8000-9990)…
+[2025-07-10 13:36:40] ### Selected free port: 8000
+[2025-07-10 13:36:40] ### Created tmp dir: /tmp/tmp.B2TFMZEQ29
+[2025-07-10 13:36:40] ### Output file     : /tmp/tmp.B2TFMZEQ29/top.html
+[2025-07-10 13:36:40] ### Launching background updater
+[2025-07-10 13:36:40] ### Starting python3 -m http.server on port 8000
+[2025-07-10 13:36:40] ### Open http://localhost:8000/top.html in your browser
+127.0.0.1 - - [10/Jul/2025 13:36:48] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:36:58] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:08] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:18] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:28] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:38] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:48] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:37:58] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:08] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:18] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:29] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:39] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:49] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:38:59] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:39:09] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:39:19] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:39:29] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:39:39] "GET /top.html HTTP/1.1" 200 -
+127.0.0.1 - - [10/Jul/2025 13:39:49] "GET /top.html HTTP/1.1" 200 -
