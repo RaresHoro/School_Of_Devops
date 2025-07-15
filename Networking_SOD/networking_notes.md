@@ -116,4 +116,147 @@ tshark -r dns_test.pcap -Y dns
 | `curl`   | `$ curl -O https://example.com/index.html`                | `-O` keeps remote filename; add `-L` to follow redirects. |
 | `wget`   | `$ wget -q --show-progress https://example.com/page.html` | `-q` quiet + progress bar.                                |
 ---
+# Advanced Network Tasks (11‑14)
+
+> **Scope** – Practical, cross‑platform instructions (Linux & Windows) for each task: capturing a browser request & replaying it via CLI, generating a CSR, local hostname mapping, and configuring NICs with `netsh`.
+
+---
+
+## 11 · Copy a Browser Web‑Request & Replay via CLI
+
+| Step                  | Chrome / Edge GUI                                 | CLI equivalent                                              |
+| --------------------- | ------------------------------------------------- | ----------------------------------------------------------- |
+| **1**                 | Press <kbd>F12</kbd> → Network tab                | –                                                           |
+| **2**                 | Check *Preserve log* → Reload page                | –                                                           |
+| **3**                 | Right‑click desired row → *Copy → cURL (bash)*    | Copies a full `curl` command incl. headers, cookies, method |
+| **4**                 | Paste into a terminal:                            | \`\$ curl '<URL>' \\                                        |
+| -H 'User-Agent: …' \\ |                                                   |                                                             |
+| -H 'Accept: …'  …\`   |                                                   |                                                             |
+| **5**                 | Add `-o response.html` if you want to save output | `$ curl … -o resp.html`                                     |
+
+**Firefox:** right‑click request → *Copy → as cURL* (Linux) or *Copy → cURL (POSIX)* (Win).
+
+> **Why it matters** – Lets you reproduce API calls, debug auth headers, and automate tests without the browser. Works identically on macOS, Linux, WSL, or Git Bash on Windows.
+
+---
+
+## 12 · Generate a CSR (Certificate Signing Request)
+
+### a) Create private key (2048‑bit RSA)
+
+```bash
+openssl genrsa -out site.key 2048
+```
+
+### b) Generate CSR interactively
+
+```bash
+openssl req -new -key site.key -out site.csr
+```
+
+You’ll be prompted for **CN (Common Name)**, Org, etc.
+`site.csr` is what you upload to the CA (Let’s Encrypt, DigiCert, etc.).
+
+### c) Non‑interactive One‑liner
+
+```bash
+openssl req -new -key site.key \
+  -subj "/C=RO/ST=Bucharest/L=Bucharest/O=Endava/OU=DevOps/CN=example.com" \
+  -out site.csr
+```
+
+Validate:
+
+```bash
+openssl req -noout -text -in site.csr
+```
+
+---
+
+## 13 · Define & Use Hostnames between Machines
+
+### Linux / macOS stub editing
+
+```bash
+sudo nano /etc/hosts
+```
+
+Add a line:
+
+```
+192.168.1.100   app.internal  app
+```
+
+Now `$ ping app` resolves to that IP.
+
+### Windows
+
+```powershell
+notepad C:\Windows\System32\drivers\etc\hosts
+```
+
+Add the same mapping. Flush DNS cache if needed:
+
+```powershell
+ipconfig /flushdns
+```
+
+### DNS zone (recommended for > few hosts)
+
+* On your DNS server (BIND, Windows DNS, Cloud‑provider) add an *A* record `app.internal` → `192.168.1.100`.
+* All clients using that DNS will resolve automatically—no per‑host edits.
+
+---
+
+## 14 · Configure Network Interfaces with **`netsh`** (Windows CLI)
+
+List interfaces:
+
+```cmd
+netsh interface ipv4 show interfaces
+```
+
+Assume `Ethernet0` has idx = 12.
+
+### a) Set static IPv4 address
+
+```cmd
+netsh interface ip set address "Ethernet0" static 172.16.123.110 255.255.254.0 172.16.122.1
+```
+
+Syntax: `static <IP> <Netmask> <Gateway>`
+
+### b) Set DNS servers
+
+```cmd
+netsh interface ip set dns "Ethernet0" static 8.8.8.8 primary
+netsh interface ip add dns "Ethernet0" 1.1.1.1 index=2
+```
+
+### c) Revert to DHCP
+
+```cmd
+netsh interface ip set address "Ethernet0" dhcp
+netsh interface ip set dns "Ethernet0" dhcp
+```
+
+Validate:
+
+```cmd
+ipconfig /all
+```
+
+> **Tip** – Use `netsh -c interface ipv4 dump` to emit a script containing the current settings. Save it before changes to allow easy rollback.
+
+---
+
+### Quick‑fire Summary Table
+
+| Task                   | Command (Linux)                      | Command (Windows)                        |
+| ---------------------- | ------------------------------------ | ---------------------------------------- |
+| Repeat browser request | Chrome DevTools → *Copy as cURL*     | Same (Edge/Chrome)                       |
+| Generate CSR           | `openssl genrsa && openssl req -new` | Same via Git Bash / WSL                  |
+| Local hostname         | edit `/etc/hosts`                    | edit `C:\…\hosts` + `ipconfig /flushdns` |
+| Net config             | `ip addr`, `nmcli`, `netplan`        | `netsh interface ip …`, `ipconfig`       |
+
 
