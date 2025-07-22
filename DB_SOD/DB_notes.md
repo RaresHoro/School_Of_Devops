@@ -171,3 +171,302 @@ High availability ensures minimal downtime by using:
 
 ⏱️ Goal: Ensure data is available and consistent even in the event of hardware or network failure.
 
+# 🧱 SQL Essentials: From Basics to Advanced Queries
+
+This guide outlines essential SQL operations, from table creation to complex queries, including real-world use cases and practical examples.
+
+---
+
+## 📋 Creating Tables
+
+Define the structure of a table using `CREATE TABLE`.
+
+```sql
+CREATE TABLE departments (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    department_id INT,
+    salary NUMERIC(10, 2),
+    FOREIGN KEY (department_id) REFERENCES departments(id)
+);
+```
+
+---
+
+## 📝 Inserting Data
+
+Insert new records into tables using `INSERT INTO`.
+
+```sql
+INSERT INTO departments (name) VALUES ('Engineering'), ('HR');
+
+INSERT INTO employees (name, department_id, salary)
+VALUES ('Alice', 1, 65000.00),
+       ('Bob', 2, 55000.00);
+```
+
+---
+
+## 🔐 Constraints
+
+Constraints enforce rules for data integrity.
+
+- `PRIMARY KEY`: Ensures each row is uniquely identifiable.
+- `FOREIGN KEY`: Maintains referential integrity between tables.
+- `NOT NULL`: Prevents null values in a column.
+- `UNIQUE`: Ensures all values in a column are different.
+- `CHECK`: Restricts values based on a condition.
+- `DEFAULT`: Sets a default value when none is provided.
+
+```sql
+CREATE TABLE products (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    price NUMERIC CHECK (price > 0),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+---
+
+## ✏️ Update & Delete
+
+Update existing rows:
+
+```sql
+UPDATE employees
+SET salary = salary * 1.10
+WHERE department_id = 1;
+```
+
+Delete rows from a table:
+
+```sql
+DELETE FROM employees
+WHERE name = 'Bob';
+```
+
+---
+
+## 🔎 Basic Queries
+
+Select data from a table:
+
+```sql
+SELECT * FROM employees;
+
+SELECT name, salary FROM employees
+WHERE salary > 60000
+ORDER BY salary DESC;
+```
+
+---
+
+## 🧮 Functions
+
+Use SQL functions to aggregate and calculate values.
+
+```sql
+SELECT COUNT(*) FROM employees;
+
+SELECT AVG(salary) FROM employees;
+
+SELECT MAX(salary), MIN(salary) FROM employees;
+```
+
+---
+
+## 🎴 Wildcards
+
+Use `LIKE` for pattern matching in string searches.
+
+```sql
+SELECT * FROM employees
+WHERE name LIKE 'A%';  -- Names starting with A
+
+SELECT * FROM employees
+WHERE name LIKE '_o%'; -- Second letter is "o"
+```
+
+---
+
+## 🧩 UNION
+
+Combine the results of two or more `SELECT` statements.
+
+```sql
+SELECT name FROM employees
+UNION
+SELECT name FROM contractors;
+```
+
+- `UNION` removes duplicates.
+- Use `UNION ALL` to include duplicates.
+
+---
+
+## 🔗 Joins
+
+Joins combine rows from two or more tables based on related columns. They are essential for working with normalized relational data.
+
+### 👇 Table Setup for Examples:
+
+```sql
+-- Table: departments
+-- id | name
+-- 1  | Engineering
+-- 2  | HR
+
+-- Table: employees
+-- id | name   | department_id
+-- 1  | Alice  | 1
+-- 2  | Bob    | 2
+-- 3  | Carol  | NULL
+```
+
+### 1. INNER JOIN
+
+Returns rows when there's a match in both tables.
+
+```sql
+SELECT e.name, d.name AS department
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.id;
+```
+
+✅ **Result:**
+- Alice | Engineering
+- Bob   | HR
+
+Carol is excluded because her `department_id` is NULL (no match).
+
+---
+
+### 2. LEFT JOIN (or LEFT OUTER JOIN)
+
+Returns all rows from the left table, and matched rows from the right table. If there's no match, NULLs are shown for the right table.
+
+```sql
+SELECT e.name, d.name AS department
+FROM employees e
+LEFT JOIN departments d ON e.department_id = d.id;
+```
+
+✅ **Result:**
+- Alice | Engineering
+- Bob   | HR
+- Carol | NULL
+
+---
+
+### 3. RIGHT JOIN (or RIGHT OUTER JOIN)
+
+Returns all rows from the right table, and matched rows from the left table.
+
+```sql
+SELECT e.name, d.name AS department
+FROM employees e
+RIGHT JOIN departments d ON e.department_id = d.id;
+```
+
+✅ Useful when you want to include all departments, even those with no employees.
+
+---
+
+### 4. FULL OUTER JOIN
+
+Returns all records when there is a match in either table. Missing values are filled with NULLs.
+
+```sql
+SELECT e.name, d.name AS department
+FROM employees e
+FULL OUTER JOIN departments d ON e.department_id = d.id;
+```
+
+✅ Includes:
+- Employees without departments (e.g. Carol)
+- Departments without employees
+
+---
+
+### 5. CROSS JOIN
+
+Returns the Cartesian product — every combination of rows from both tables.
+
+```sql
+SELECT e.name, d.name AS department
+FROM employees e
+CROSS JOIN departments d;
+```
+
+✅ Use with caution, as it can return a large number of rows.
+
+---
+
+## 🪜 Nested Queries (Subqueries)
+
+A subquery is a query nested inside another.
+
+```sql
+SELECT name FROM employees
+WHERE salary > (
+    SELECT AVG(salary) FROM employees
+);
+```
+
+✅ Useful for filtering based on calculated values.
+
+---
+
+## 🧹 ON DELETE
+
+Specify behavior when a referenced row is deleted.
+
+```sql
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    employee_id INT,
+    description TEXT,
+    FOREIGN KEY (employee_id)
+        REFERENCES employees(id)
+        ON DELETE SET NULL
+);
+```
+
+### Other options:
+- `CASCADE`: Deletes dependent rows
+- `RESTRICT`: Prevents deletion if referenced
+- `SET NULL`: Sets referencing column to NULL
+
+---
+
+## 🧠 Triggers
+
+Triggers execute custom logic automatically when a specified event occurs (INSERT, UPDATE, DELETE).
+
+```sql
+CREATE FUNCTION log_salary_change()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO salary_changes (employee_id, old_salary, new_salary, changed_at)
+    VALUES (OLD.id, OLD.salary, NEW.salary, CURRENT_TIMESTAMP);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER salary_update_trigger
+AFTER UPDATE ON employees
+FOR EACH ROW
+WHEN (OLD.salary IS DISTINCT FROM NEW.salary)
+EXECUTE FUNCTION log_salary_change();
+```
+
+✅ Useful for auditing, validations, or automated updates.
+
+---
+
