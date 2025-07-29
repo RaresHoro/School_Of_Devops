@@ -696,5 +696,397 @@ They are foundational to secure software development and effective vulnerability
 - [GitHub Advisory Database](https://github.com/advisories)
 - [National Vulnerability Database (NVD)](https://nvd.nist.gov/)
 
+---
+# 📦 Storage Lifecycle Rules
+
+## 📘 What Are Storage Lifecycle Rules?
+
+**Storage Lifecycle Rules** are automated policies that manage the **retention, movement, and deletion** of stored data over time.
+
+They help control:
+- **Where** your data resides (e.g., Hot vs. Cool vs. Archive tiers)
+- **How long** data is retained
+- **When** data is deleted
+
+> The primary goal is to **optimize cost and performance** automatically.
+
+---
+
+## 🔁 How Lifecycle Rules Work
+
+A typical lifecycle flow might look like this:
+
+- **Days 0–30**: Store files in the **Hot/Standard** tier for frequent access.
+- **Days 31–90**: Move less-accessed files to the **Cool/Archive** tier.
+- **Day 91+**: Automatically **delete** files no longer needed.
+
+These actions are automated based on object age, access patterns, and naming.
+
+---
+
+## 🧠 Why Use Lifecycle Rules?
+
+- 💰 **Cost Savings**: Shift data to lower-cost storage tiers
+- ⚙️ **Automation**: No need for manual cleanup
+- 📜 **Compliance**: Enforce data retention or deletion policies
+- 🧹 **Efficiency**: Keep your storage lean and manageable
+
+---
+
+## 🔄 Example Lifecycle Actions
+
+| Action                  | Common Use Case                     |
+|--------------------------|--------------------------------------|
+| Move to Cool/Archive     | Archive logs or images after 30 days |
+| Delete blobs             | Remove old temp files after 90 days  |
+| Tier-down blob storage   | Reduce cost for infrequently used data |
+| Retain indefinitely      | Keep legal documents untouched       |
+
+---
+
+## 🏗️ Lifecycle Rules in Azure Blob Storage
+
+Azure supports lifecycle rules specifically for **Blob Storage**. You can:
+
+- Apply rules to **containers**, **prefixes**, or **specific blob types**
+- Use filters like:
+  - **Last modified date**
+  - **Blob name patterns**
+  - **Access tiers**
+
+### Supported Actions in Azure:
+
+- Move to **Cool tier**
+- Move to **Archive tier**
+- **Delete blobs**
+- **Delete snapshots**
+- **Delete blob versions**
+
+---
+
+## 📅 Common Use Cases
+
+- **Application Logs**: Keep for 30 days in Hot, archive afterward, delete at 90 days.
+- **Backups**: Archive after 7 days, delete after 90 days.
+- **Media Content**: Gradually move to colder tiers as it ages.
+- **Data Retention**: Automatically delete PII or sensitive data after compliance deadlines.
+
+---
+
+## 🧠 Things to Keep in Mind
+
+- Lifecycle rules are **bulk operations** — they apply automatically to all matching objects.
+- Archive tier is the **cheapest**, but also the **slowest to access** (rehydration required).
+- Some transitions may **incur costs** if accessed later.
+- Ensure rules don’t **conflict** or cause unexpected deletion (e.g., delete before transition).
+
+---
+
+## ✅ Summary
+
+Storage Lifecycle Rules are a powerful, cost-effective way to:
+- Automate storage management
+- Ensure compliance with data retention policies
+- Optimize cloud spending
+
+They're widely supported across cloud platforms like **Azure Blob Storage**, **AWS S3**, and **Google Cloud Storage** — and are highly recommended for long-lived or high-volume storage scenarios.
+
+---
+
+# 💰 Resource Tagging (Follow the Money)
+
+## 📘 What Is Resource Tagging?
+
+**Resource tagging** is the process of attaching **key-value metadata** to cloud resources to help with organization, automation, governance, and especially **cost management**.
+
+Tags are simple labels, such as:
+
+```
+Environment=Prod
+Owner=rares.horodinca@endava.com
+Project=AI-Initiative
+```
+
+They help you **track, search, group, and manage** cloud resources effectively.
+
+---
+
+## 💡 “Follow the Money” – Why Tagging Is Critical
+
+In cloud platforms like Azure, it's easy to create resources and lose track of **who owns them, why they exist, or how much they're costing**.
+
+Tagging allows you to **follow the money** by tying usage and billing to:
+- Specific people or teams
+- Departments or cost centers
+- Projects or environments
+- Business justification
+
+---
+
+## 🧱 Example Tags and Their Purpose
+
+| Tag Key       | Value Examples                  | Purpose                            |
+|---------------|----------------------------------|------------------------------------|
+| `Owner`       | `rares.horodinca@endava.com`     | Identifies the responsible person  |
+| `Project`     | `CRM-Platform`, `DataLake-2025` | Groups resources by initiative     |
+| `Environment` | `Dev`, `Test`, `Prod`           | Indicates lifecycle stage          |
+| `CostCenter`  | `IT-OPS`, `FIN-DEV`             | Maps usage to financial units      |
+| `Stage`       | `Build`, `Staging`, `Live`      | Tracks deployment context          |
+| `Expiration`  | `2025-09-01`                    | Helps with automated cleanup       |
+
+---
+
+## 📊 Tags for Cost Management
+
+Tags are fully integrated with **Azure Cost Management + Billing**. You can:
+
+- **Filter usage and cost reports** by tag values
+- **Create budgets and alerts** per project or owner
+- **Visualize spend** by department or function
+- Enable **chargebacks and showbacks** internally
+
+This allows teams to **own their consumption** and stay accountable.
+
+---
+
+## 🧠 Best Practices for Tagging
+
+1. **Standardize your tag keys**
+   - Use lowercase, no spaces or special characters
+   - Be consistent across teams and resource types
+
+2. **Automate tagging with policies**
+   - Use Azure Policy to enforce required tags
+   - Auto-populate default values where needed
+
+3. **Include tags in templates and scripts**
+   - Bicep, ARM, Terraform, CLI — tag everything by default
+
+4. **Audit tagging regularly**
+   - Use Azure Resource Graph or reporting tools to find missing or inconsistent tags
+
+---
+
+## ⚠️ Common Mistakes to Avoid
+
+- ❌ Inconsistent tag keys (`project` vs `Project`)
+- ❌ Leaving values blank (`Owner=` with no value)
+- ❌ Only tagging top-level resources (misses attached disks, IPs, etc.)
+- ❌ Ignoring tags in cost reporting
+
+---
+
+## ✅ Summary
+
+| Benefit             | Description                                       |
+|---------------------|---------------------------------------------------|
+| Cost Tracking        | Assign costs by team, project, or department     |
+| Governance           | Identify resource owners and purpose             |
+| Automation           | Enable rules, alerts, and cleanup by tag         |
+| Compliance           | Enforce tagging policies with Azure Policy       |
+
+
+> 🎯 **Tag it, track it, trim it. That’s how you follow the money.**
+
+---
+
+# ⚙️ High Availability (HA) — Applications and Clusters
+
+## 📘 What Is High Availability?
+
+**High Availability (HA)** refers to the design and implementation of systems in a way that ensures **minimal downtime** and **continuous operation** even in the event of component failures.
+
+The goal is to keep services accessible and responsive — especially critical in cloud-native environments.
+
+---
+
+## 🧩 HA in Applications vs HA in Clusters
+
+### 🧩 High Availability in Applications
+
+High availability in applications means ensuring that the **end-user experience is uninterrupted**, even if parts of the backend fail.
+
+#### ✅ Strategies:
+- **Load Balancers** to distribute traffic across multiple instances
+- **Auto-scaling and auto-healing** to replace unhealthy components
+- **Retry logic** within the application code
+- **Redundancy**: Deploy multiple copies of each service
+
+### 🧱 High Availability in Clusters
+
+A **cluster** is a group of servers (nodes) that work together to host workloads. In a cluster:
+
+- HA ensures that the **system keeps running** even if one or more nodes go down
+- Critical services (databases, containers, APIs) remain accessible
+
+#### ✅ Common Examples:
+- **Kubernetes clusters**
+- **Database clusters** (SQL Always On, MongoDB Replica Sets)
+- **Azure VM Scale Sets**
+
+---
+
+## 🔄 HA Techniques Across Components
+
+| Component        | HA Technique                                             |
+|------------------|----------------------------------------------------------|
+| Web Applications | Load balancing, multi-instance deployment                |
+| Databases        | Replication, failover clusters, geo-redundancy           |
+| Virtual Machines | Availability sets/zones, health probes, auto-restart    |
+| Containers       | Kubernetes replica sets, self-healing nodes              |
+| Storage          | LRS, ZRS, GRS redundancy                                 |
+| Networking       | Redundant gateways, Traffic Manager, Azure Front Door   |
+
+---
+
+## 🏗️ High Availability in Azure
+
+Azure provides native tools and services to support high availability:
+
+- **Availability Sets**: Protect VMs from host-level failures
+- **Availability Zones**: Protect VMs/apps from datacenter outages
+- **Azure Load Balancer**: Distribute traffic across backend pools
+- **Azure Front Door**: Global HTTP load balancing and failover
+- **Azure Kubernetes Service (AKS)**: Node auto-healing, multi-zone deployments
+- **SQL Database Auto-Failover**: Resilient, managed database HA
+
+### 📊 Azure SLA Tiers
+
+| Deployment Type              | Typical SLA          |
+|------------------------------|----------------------|
+| Single VM (Premium SSD)      | 99.9%                |
+| Availability Set             | 99.95%               |
+| Availability Zones           | 99.99%               |
+
+---
+
+## 📅 HA vs Disaster Recovery (DR)
+
+| Aspect             | High Availability (HA)                 | Disaster Recovery (DR)                 |
+|--------------------|----------------------------------------|----------------------------------------|
+| Focus              | Continuous service                     | Service restoration after outage       |
+| Recovery Time      | Seconds to minutes                     | Minutes to hours                       |
+| Tools              | Load balancers, zones, clustering      | Backups, geo-replication, failover     |
+
+- **HA** is about **avoiding downtime**
+- **DR** is about **recovering from downtime**
+
+---
+
+## ✅ Summary
+
+High Availability is all about **designing for failure**:
+- Ensure **no single point of failure**
+- Use **redundancy, distribution, and automation**
+- Rely on **cloud-native HA tools and patterns**
+
+---
+
+# 🚨 P0, P1, P2 — Priority Levels in Incident and Task Management
+
+## 📘 What Are P0, P1, P2?
+
+**P0**, **P1**, **P2** (and sometimes **P3**, **P4**) are commonly used priority levels to indicate the **urgency and impact** of a task, bug, or incident.
+
+These labels help teams triage, communicate, and respond consistently to issues based on their criticality.
+
+---
+
+## 📊 Priority Level Definitions
+
+| Priority | Label        | Description                                                                 |
+|----------|--------------|-----------------------------------------------------------------------------|
+| **P0**   | 🔥 Critical   | Full system outage, data loss, or security breach. Requires immediate response. |
+| **P1**   | 🚨 High       | Major functionality broken; workaround exists. Urgent but not catastrophic. |
+| **P2**   | ⚠️ Medium     | Non-blocking bugs or feature gaps. Can be scheduled into upcoming sprints. |
+| **P3+** | ✅ Low         | Cosmetic issues, enhancements, or technical debt. Not time-sensitive.       |
+
+---
+
+## 🔥 P0 — Critical Priority
+
+### Examples:
+- Entire system or key service is down
+- Production deployment failure
+- Security incident or data breach
+- Users cannot log in or access critical features
+
+### Response:
+- **Immediate escalation**
+- **24/7 on-call rotation may be triggered**
+- Stakeholder communication initiated
+- Typically tracked in a **"war room"** setting
+
+---
+
+## 🚨 P1 — High Priority
+
+### Examples:
+- Broken features with a workaround
+- Performance degradation under load
+- Affecting a specific customer segment
+
+### Response:
+- Acknowledged and assigned quickly (e.g., within hours)
+- Fix planned within **days**, not weeks
+- Impact tracked closely
+
+---
+
+## ⚠️ P2 — Medium Priority
+
+### Examples:
+- Minor bugs with low user impact
+- Missing or inconsistent behavior
+- UI misalignment
+
+### Response:
+- Logged and triaged
+- Typically scheduled in an upcoming sprint
+- May be deferred if higher priority work exists
+
+---
+
+## ✅ P3 / P4 — Low Priority
+
+### Examples:
+- Cosmetic issues
+- Nice-to-have feature requests
+- Outdated documentation
+- Known tech debt
+
+These are typically logged for future backlog grooming or enhancement cycles.
+
+---
+
+## 🧠 Why Prioritization Matters
+
+Using a clear priority system helps teams:
+
+- Focus on what truly matters
+- Respond to incidents quickly and effectively
+- Communicate urgency and expectations
+- Support SLA commitments and incident management workflows
+
+---
+
+## 🔍 Priority vs Severity
+
+| Term       | What it Describes                  |
+|------------|-------------------------------------|
+| **Severity** | The **impact** of the issue (e.g., all users affected) |
+| **Priority** | The **urgency** of the response or fix                  |
+
+> A minor bug may be *low severity* but *high priority* if it affects a key customer presentation tomorrow.
+
+---
+
+## ✅ Summary
+
+- **P0** = Stop everything, fix immediately
+- **P1** = High importance, fix ASAP with a plan
+- **P2** = Moderate impact, scheduled appropriately
+- **P3+** = Minor issues, track and resolve as resources allow
+
 
 
