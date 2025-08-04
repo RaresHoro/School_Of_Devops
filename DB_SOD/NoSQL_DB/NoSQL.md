@@ -1,7 +1,3 @@
-Here is your complete `.md` file content, ready to paste or save as `mongodb_guide.md`:
-
----
-
 ````markdown
 # 🗃️ MongoDB Guide: CRUD, Indexing, Backup, Replication & NoSQL Structure
 
