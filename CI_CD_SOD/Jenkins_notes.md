@@ -273,9 +273,3 @@ pipeline {
 
 ---
 
-```
-
-⚡ Now you have a **deep-dive guide** covering Jenkins fundamentals, setup, pipelines, scaling in cloud, and shared libraries.
-
-Would you like me to also **compare Jenkins with GitHub Actions / GitLab CI / Azure DevOps** so you see where Jenkins is still strong and where cloud-native CI/CD tools might be better?
-```
