@@ -43,13 +43,13 @@ docker run -d \
 
   **8080** → Web UI.\
   **50000** → Communication with Jenkins agents.\
-  **jenkins\_home** → Persistent data (jobs, plugins, configs).\
+  **jenkins\_home** → Persistent data (jobs, plugins, configs).
 
 ### Best Practices
 
   Mount `jenkins_home` on external storage for backups.\
   Use **reverse proxy + HTTPS** (Nginx/Traefik + Let’s Encrypt)\
-  Run Jenkins as a non-root user in production.\
+  Run Jenkins as a non-root user in production.
 
 ---
 
@@ -64,6 +64,7 @@ Jenkins supports **distributed builds** through agents.
   * Provides the web UI.
   * Orchestrates jobs.
   * Stores build metadata.
+
   **Agent (Slave)**:
 
   * Executes the actual build/test jobs.
