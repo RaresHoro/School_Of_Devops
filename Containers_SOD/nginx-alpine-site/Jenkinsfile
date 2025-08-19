@@ -3,7 +3,7 @@ pipeline{
 
     environment{
         IMAGE_NAME = "school_of_devops-nginx"
-        IMAGE_TAG = "jenkins:${env.BUILD_ID}"
+        IMAGE_TAG = "jenkins-${env.BUILD_ID}"
         HOST_PORT    = "80"
         CONTAINER_PORT = "80"
         CONTAINER_NAME = "schoolofdevops-container"
