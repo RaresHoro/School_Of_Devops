@@ -64,6 +64,7 @@ Jenkins supports **distributed builds** through agents.
   * Provides the web UI.
   * Orchestrates jobs.
   * Stores build metadata.
+
   **Agent (Slave)**:
 
   * Executes the actual build/test jobs.
