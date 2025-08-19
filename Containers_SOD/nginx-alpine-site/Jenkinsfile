@@ -14,7 +14,7 @@ pipeline{
         stage("Build Image"){
             steps{
                 script {
-                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Containers_SOD/nginx-alpine-site/Dockerfile .")
+                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Containers_SOD/nginx-alpine-site/Dockerfile Containers_SOD/nginx-alpine-site")
                     sh "docker images | grep ${IMAGE_NAME}"
                 }
             }
