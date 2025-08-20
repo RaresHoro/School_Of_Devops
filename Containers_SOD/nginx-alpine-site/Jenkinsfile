@@ -28,19 +28,18 @@ pipeline{
                 }
             }
         }
-        stage("Test"){
-            steps{
-                script {
-                    retry(5) {
-                    sleep 2
-                    sh """
-                    code=\$(curl -s -H 'Host: ${SITE_HOST}' -o /dev/null -w '%{http_code}' ${SITE_URL}:${HOST_PORT})
-                    echo "HTTP status: \$code"
-                    test "\$code" = "200"
-                    """
-                    }
+        stage('Smoke Test') {
+        steps {
+            script {
+            retry(5) {
+                sleep 2
+                sh """
+                docker exec ${CONTAINER_NAME} sh -c "apk add --no-cache curl >/dev/null 2>&1 || true; \
+                    curl -s -o /dev/null -w '%{http_code}' -H 'Host: ${SITE_HOST}' http://127.0.0.1:80" | grep 200
+                """
                 }
             }
         }
     }
+}
 }
