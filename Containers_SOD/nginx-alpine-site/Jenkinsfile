@@ -29,7 +29,11 @@ pipeline{
             }
         }
         stage("Test"){
-
+            steps{
+                script {
+                    sh "curl -s -o /dev/null -w '%{http_code}' ${SITE_URL}:${HOST_PORT} | grep 200"
+                }
+            }
         }
     }
 }
