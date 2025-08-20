@@ -25,7 +25,7 @@ pipeline{
                 script {
                     sh """
                         # Remove container with the same name if it exists (running or stopped)
-                        if docker ps -a --format '{{.Names}}' | grep -w '^${CONTAINER_NAME}$' >/dev/null 2>&1; then
+                        if docker ps -a --format '{{.Names}}' | grep -Fx "${CONTAINER_NAME}" >/dev/null 2>&1; then
                         docker rm -f ${CONTAINER_NAME} || true
                         fi
 
