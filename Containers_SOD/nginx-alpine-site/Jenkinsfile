@@ -34,7 +34,7 @@ pipeline{
                     retry(5) {
                     sleep 2
                     sh """
-                    code=\$(curl -s -H 'Host: ${SITE_HOST}' -o /dev/null -w '%{http_code}' ${SITE_URL}:${HOST_PORT}/)
+                    code=\$(curl -s -H 'Host: ${SITE_HOST}' -o /dev/null -w '%{http_code}' ${SITE_URL}:${HOST_PORT})
                     echo "HTTP status: \$code"
                     test "\$code" = "200"
                     """
