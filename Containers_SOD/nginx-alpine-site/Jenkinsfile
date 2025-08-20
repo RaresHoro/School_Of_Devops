@@ -19,6 +19,7 @@ pipeline{
                     sh "docker images | grep ${IMAGE_NAME}"
                 }
             }
+        }
         stage("Run Container"){
             steps{
                 script {
@@ -28,5 +29,4 @@ pipeline{
             }
         }
     }
-}
 }
