@@ -20,11 +20,26 @@ pipeline{
                 }
             }
         }
-        stage("Run Container"){
-            steps{
+        stage("Run Container") {
+            steps {
                 script {
-                    sh "docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:${IMAGE_TAG}"
-                    sh "docker ps | grep ${CONTAINER_NAME}"
+                    sh """
+                        # Remove container with the same name if it exists (running or stopped)
+                        if docker ps -a --format '{{.Names}}' | grep -w '^${CONTAINER_NAME}$' >/dev/null 2>&1; then
+                        docker rm -f ${CONTAINER_NAME} || true
+                        fi
+
+                        # Free the host port if another container is using it
+                        INUSE=\$(docker ps -q --filter "publish=${HOST_PORT}")
+                        if [ -n "\$INUSE" ]; then
+                        echo "Port ${HOST_PORT} in use by container(s): \$INUSE — stopping them"
+                        docker rm -f \$INUSE || true
+                        fi
+
+                        # Run fresh container
+                        docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} ${IMAGE_NAME}:${IMAGE_TAG}
+                        docker ps | grep ${CONTAINER_NAME}
+                    """
                 }
             }
         }
