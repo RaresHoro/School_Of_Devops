@@ -15,7 +15,7 @@ variables:
 
 
   ACR_NAME: 'sampleReg12345'
-  REGISTRY: '$(ACR_NAME).azurecr.io'
+  REGISTRY: 'samplereg12345.azurecr.io'
   REMOTE_IMAGE: '$(REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)'
 
 stages:
