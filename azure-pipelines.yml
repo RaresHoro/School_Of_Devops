@@ -1,19 +1,53 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
 
 trigger:
-- main
+- none
+
 
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  IMAGE_NAME: 'school_of_devops-nginx'
+  IMAGE_TAG: 'ado-$(Build.BuildId)'
+  HOST_PORT: '8080'
+  CONTAINER_PORT: '80'
+  CONTAINER_NAME: 'schoolofdevops-ado-$(Build.BuildId)'
+  SITE_HOST: 'www.schoolofdevops.ro'
+  SITE_URL: 'http://127.0.0.1'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+stages:
+- stage: BuildRunTest
+- displayName: 'Build, Run and Test'
+  jobs:
+  - job: docker_job
+    displayName: 'Docker build & run'
+    steps:
+    - checkout: self
+
+    - script: |
+        set -e
+        docker build \
+          -t $(IMAGE_NAME):$(IMAGE_TAG) \
+          -f Containers_SOD/nginx-alpine-site/Dockerfile \
+          Containers_SOD/nginx-alpine-site
+        docker images | grep $(IMAGE_NAME)
+      displayName: 'Build Docker image'
+
+    - script: |
+        set -e
+        # remove any container with same name (running or exited)
+        if docker ps -a --format '{{.Names}}' | grep -Fx '$(CONTAINER_NAME)' >/dev/null 2>&1; then
+          docker rm -f $(CONTAINER_NAME) || true
+        fi
+
+        # stop & remove any container using the host port
+        INUSE=$(docker ps -q --filter "publish=$(HOST_PORT)")
+        if [ -n "$INUSE" ]; then
+          echo "Port $(HOST_PORT) in use by: $INUSE — stopping them"
+          docker rm -f $INUSE || true
+        fi
+
+        # run fresh container (map HOST_PORT -> CONTAINER_PORT)
+        docker run -d --name $(CONTAINER_NAME) -p $(HOST_PORT):$(CONTAINER_PORT) $(IMAGE_NAME):$(IMAGE_TAG)
+        docker ps | grep $(CONTAINER_NAME)
+      displayName: 'Run Docker container'
