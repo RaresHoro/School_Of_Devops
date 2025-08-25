@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'CI_CD_SOD/Github-Actions/02 Starting Project/**'
+      - 'CI_CD_SOD/Github-Actions/**'
 
 jobs:
   test:
