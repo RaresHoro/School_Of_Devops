@@ -1,0 +1,10 @@
+name: handle issues
+on:
+  issues:
+    types: [opened, edited, deleted, transferred, pinned, unpinned, closed, reopened, assigned, unassigned, labeled, unlabeled, milestoned, demilestoned]
+jobs:
+  issue_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log issue event
+        run: echo "Issue event of type '${{ github.event.action }}' occurred on issue #${{ github.event.issue.number }} titled '${{ github.event.issue.title }}'"
