@@ -1,0 +1,27 @@
+name: Events Demo 1
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CI_CD_SOD/Github-Actions/01 Starting Project/'
+      - '.github/workflows/demo1.yml'
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "CI_CD_SOD/Github-Actions/01 Starting Project"
+    steps:
+      - name: Output event data
+        run: echo "${{ toJSON(github.event) }}"
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm ci
+      - name: Test code
+        run: npm run test
+      - name: Build code
+        run: npm run build
+      - name: Deploy project
+        run: echo "Deploying..."
