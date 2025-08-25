@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'CI_CD_SOD/Github-Actions/**'
+      - 'CI_CD_SOD/Github-Actions/04 Practice Project (Start)/'
       - '.github/workflows/deployment1.yml'
   workflow_dispatch:
 jobs:
@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
           run:
-            working-directory: "CI_CD_SOD/Github-Actions/02 Starting Project"
+            working-directory: "CI_CD_SOD/Github-Actions/04 Practice Project (Start)"
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
           run:
-            working-directory: "CI_CD_SOD/Github-Actions/02 Starting Project"
+            working-directory: "CI_CD_SOD/Github-Actions/04 Practice Project (Start)"
         steps:
           - name: Checkout repository
             uses: actions/checkout@v3
@@ -40,7 +40,7 @@ jobs:
       runs-on: ubuntu-latest
       defaults:
         run:
-          working-directory: "CI_CD_SOD/Github-Actions/03 Deployment Exercise 1"
+          working-directory: "CI_CD_SOD/Github-Actions/04 Practice Project (Start)"
       steps:
         - name: Checkout repository
           uses: actions/checkout@v3

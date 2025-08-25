@@ -3,7 +3,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'CI_CD_SOD/Github-Actions/**'
+      - 'CI_CD_SOD/Github-Actions/02 Starting Project/'
       - '.github/workflows/test.yml'
   workflow_dispatch:
 
