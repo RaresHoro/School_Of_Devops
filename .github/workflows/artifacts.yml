@@ -39,8 +39,9 @@ jobs:
         with:
           name: production-artifacts
           path: |
-            dist
-            package.json
+            CI_CD_SOD/Github-Actions/01 Starting Project/dist
+            CI_CD_SOD/Github-Actions/01 Starting Project/package.json
+          if-no-files-found: error
   deploy:
     needs: build
     runs-on: ubuntu-latest
