@@ -19,6 +19,8 @@ jobs:
         node-version: 18
     - name: Install dependencies
       run: npm ci
+      working-directory: CI_CD_SOD/Github-Actions
     - name: Run tests
       run: npm test
+      working-directory: CI_CD_SOD/Github-Actions
 
