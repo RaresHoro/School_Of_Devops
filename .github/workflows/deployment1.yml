@@ -1,0 +1,53 @@
+name: Deployment exercise 1
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'CI_CD_SOD/Github-Actions/**'
+      - '.github/workflows/deployment1.yml'
+  workflow_dispatch:
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: "CI_CD_SOD/Github-Actions/03 Deployment Exercise 1"
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v3
+
+          - name: Install dependencies
+            run: npm ci
+
+          - name: Lint code
+            run: npm run lint
+    test:
+        runs-on: ubuntu-latest
+        defaults:
+          run:
+            working-directory: "CI_CD_SOD/Github-Actions/03 Deployment Exercise 1"
+        steps:
+          - name: Checkout repository
+            uses: actions/checkout@v3
+
+          - name: Install dependencies
+            run: npm ci
+
+          - name: Lint code
+            run: npm test
+    deploy:
+      needs: [test, lint]
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: "CI_CD_SOD/Github-Actions/03 Deployment Exercise 1"
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+        - name: Install dependencies
+          run: npm ci
+        - name: Build application
+          run: npm run build
+        - name: Deploy application
+          run: echo "Deploying application..."
+
