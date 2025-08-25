@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - 'CI_CD_SOD/Github-Actions/**'
+      - '.github/workflows/test.yml'
 
 jobs:
   test:
