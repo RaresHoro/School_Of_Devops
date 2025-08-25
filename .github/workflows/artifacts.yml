@@ -5,6 +5,7 @@ on:
     paths:
       - 'CI_CD_SOD/Github-Actions/01 Starting Project/'
       - '.github/workflows/artifacts.yml'
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
