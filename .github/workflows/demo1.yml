@@ -1,4 +1,4 @@
-name: Event Demo 1
+name: Events Demo 1
 on:
   push:
     branches: [main]
