@@ -28,7 +28,7 @@ jobs:
       run:
         working-directory: "CI_CD_SOD/Github-Actions/01 Starting Project"
     outputs:
-        script-file: ${{ steps.publish_js.outputs.script-file }}
+        script-file: ${{ steps.publish_js.outputs.script_file }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -39,6 +39,7 @@ jobs:
       - name: Publish JS file
         id: publish_js
         run: |
+          ls -la dist/assets/
           file="$(ls dist/assets/*.js | head -n 1)"
           echo "script_file=$file" >> "$GITHUB_OUTPUT"
 
