@@ -45,9 +45,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: "CI_CD_SOD/Github-Actions/01 Starting Project"
     steps:
       - name: Deploy
         run: echo "Deploying..."
