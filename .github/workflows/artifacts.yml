@@ -59,7 +59,7 @@ jobs:
       - name: List files
         run: ls -la
       - name: List dist files
-        run: ls -la dist/assets
+        run: ls -la assets
       - name: Output script file
         run: echo "Script file is ${{ needs.build.outputs.script-file }}"
       - name: Deploy
