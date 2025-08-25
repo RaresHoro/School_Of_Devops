@@ -27,6 +27,8 @@ jobs:
     defaults:
       run:
         working-directory: "CI_CD_SOD/Github-Actions/01 Starting Project"
+    outputs:
+        script-file: ${{ steps.publish_js.outputs.script-file }}
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -34,6 +36,9 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+      - name: Publish JS file
+        id: publish_js
+        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> GITHUB_OUTPUT';'
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -53,5 +58,7 @@ jobs:
           name: production-artifacts
       - name: List files
         run: ls -la
+      - name: Output script file
+        run: echo "Script file is ${{ needs.build.outputs.script-file }}"
       - name: Deploy
         run: echo "Deploying..."
