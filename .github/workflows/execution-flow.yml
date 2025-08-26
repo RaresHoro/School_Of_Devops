@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "CI_CD_SOD/Github-Actions/02 Starting Project"
+        working-directory: "CI_CD_SOD/Github-Actions/Condition Project"
     steps:
       - name: Get code
         uses: actions/checkout@v3
