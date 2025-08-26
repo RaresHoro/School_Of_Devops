@@ -1,16 +1,22 @@
 name: 'Get and cache dependencies'
 description: 'An action to get and cache dependencies'
+inputs:
+  caching: # input parameters
+    description: 'Whether to cache dependencies or not'
+    required: false
+    default: 'true'
 runs:
   using: 'composite'
   steps:
     - name: Cache dependencies
+      if: ${{ inputs.caching == 'true' }}
       id: cache
       uses: actions/cache@v3
       with:
         path: CI_CD_SOD/Github-Actions/Actions_Project/node_modules
         key: deps-node-modules-${{ hashFiles('CI_CD_SOD/Github-Actions/Actions_Project/package-lock.json') }}
     - name: Install dependencies
-      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true' || ${{ inputs.caching == 'false' }}
       working-directory: CI_CD_SOD/Github-Actions/Actions_Project
       run: npm ci --prefer-offline --no-audit --no-fund
       shell: bash
