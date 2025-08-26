@@ -10,15 +10,14 @@ env:
   MONGO_DB_NAME: gha_admin
 jobs:
   test:
+    env:
+        MONGO_DB_CLUSTER_ADDRESS: cluster0.lgc9edv.mongodb.net
+        MONGODB_USERNAME: rares
+        MONGODB_PASSWORD: 4lazbGFOWXAE3iJA
+        PORT: 3000
     defaults:
       run:
         working-directory: "CI_CD_SOD/Github-Actions/Env Project"
-    env:
-      MONGO_DB_CLUSTER_ADDRESS: cluster0.lgc9edv.mongodb.net
-      MONGODB_USERNAME: rares
-      MONGODB_PASSWORD: 4lazbGFOWXAE3iJA
-      PORT: 3000
-    environment: testing
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
