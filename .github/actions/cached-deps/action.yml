@@ -5,6 +5,10 @@ inputs:
     description: 'Whether to cache dependencies or not'
     required: false
     default: 'true'
+outputs:
+  used-cache: # output parameters
+    description: 'Whether the cache was hit or not'
+    value: ${{ steps.install-deps.outputs.cache }}
 runs:
   using: 'composite'
   steps:
@@ -16,7 +20,10 @@ runs:
         path: CI_CD_SOD/Github-Actions/Actions_Project/node_modules
         key: deps-node-modules-${{ hashFiles('CI_CD_SOD/Github-Actions/Actions_Project/package-lock.json') }}
     - name: Install dependencies
+      id: install-deps
       if: steps.cache.outputs.cache-hit != 'true' || ${{ inputs.caching == 'false' }}
       working-directory: CI_CD_SOD/Github-Actions/Actions_Project
-      run: npm ci --prefer-offline --no-audit --no-fund
+      run: |
+        npm ci --prefer-offline --no-audit --no-fund
+        echo "cache=${{inputs.caching}}" >> $GITHUB_OUTPUT
       shell: bash
