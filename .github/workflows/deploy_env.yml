@@ -7,7 +7,7 @@ on:
       - 'CI_CD_SOD/GitHub_Actions/Env Project/**'
       - '.github/workflows/deploy_env.yml'
 env:
-  MONGO_DB_NAME: sample_mflix
+  MONGO_DB_NAME: gha-admin
 jobs:
   test:
     defaults:
@@ -15,8 +15,8 @@ jobs:
         working-directory: "CI_CD_SOD/Github-Actions/Env Project"
     env:
       MONGO_DB_CLUSTER: cluster0.lgc9edv.mongodb.net
-      MONGO_DB_USERNAME: rares
-      MONGO_DB_PASSWORD: 4lazbGFOWXAE3iJA
+      MONGODB_USERNAME: rares
+      MONGODB_PASSWORD: 4lazbGFOWXAE3iJA
       PORT: 8080
     environment: testing
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Output information
-        run: echo "Mongo Username is ${{ env.MONGO_DB_USERNAME }}"
+        run: echo "Mongo Username is ${{ env.MONGODB_USERNAME }}"
 
   deploy:
     needs: test
@@ -43,5 +43,5 @@ jobs:
     steps:
       - name: Output information
         run: |
-          echo "Mongo Username is ${{ env.MONGO_DB_USERNAME }}"
+          echo "Mongo Username is ${{ env.MONGODB_USERNAME }}"
           echo "Mongo Database is $MONGO_DB_NAME"
