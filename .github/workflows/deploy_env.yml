@@ -4,10 +4,10 @@ on:
     branches:
       - main
     paths:
-      - 'CI_CD/GitHub_Actions/Env Project/**'
+      - 'CI_CD_SOD/GitHub_Actions/Env Project/**'
       - '.github/workflows/deploy_env.yml'
 env:
-  MONGO_DB_NAME: gha-demo
+  MONGO_DB_NAME: sample_mflix
 jobs:
   test:
     defaults:
