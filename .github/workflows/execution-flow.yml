@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - 'CI_CD_SOD/Github-Actions/Condition Project/**'
-      - '.github/workflows/execution_flow.yml'
+      - '.github/workflows/execution-flow.yml'
 jobs:
   lint:
     runs-on: ubuntu-latest
