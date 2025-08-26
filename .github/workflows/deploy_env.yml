@@ -1,0 +1,44 @@
+name: Deployment
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'CI_CD/GitHub_Actions/Env Project/**'
+      - '.github/workflows/deploy_env.yml'
+env:
+  MONGO_DB_NAME: gha-demo
+jobs:
+  test:
+    env:
+      MONGO_DB_CLUSTER: cluster0.lgc9edv.mongodb.net
+      MONGO_DB_USERNAME: rares
+      MONGO_DB_PASSWORD: 4lazbGFOWXAE3iJA
+      PORT: 3000
+    environment: testing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v3
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-deps-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT
+      - name: Run tests
+        run: npm test
+      - name: Output information
+        run: echo "Mongo Username is ${{ env.MONGO_DB_USERNAME }}"
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output information
+        run: |
+          echo "Mongo Username is ${{ env.MONGO_DB_USERNAME }}"
+          echo "Mongo Database is $MONGO_DB_NAME"
