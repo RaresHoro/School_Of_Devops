@@ -17,7 +17,7 @@ jobs:
       MONGO_DB_CLUSTER: cluster0.lgc9edv.mongodb.net
       MONGO_DB_USERNAME: rares
       MONGO_DB_PASSWORD: 4lazbGFOWXAE3iJA
-      PORT: 3000
+      PORT: 8080
     environment: testing
     runs-on: ubuntu-latest
     steps:
