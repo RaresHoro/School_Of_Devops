@@ -17,6 +17,8 @@ jobs:
     defaults:
       run:
         working-directory: "CI_CD_SOD/Github-Actions/Docker_Project"
+    container:
+      image: node:16
     env:
       MONGODB_CONNECTION_PROTOCOL: mongodb+srv
       MONGODB_CLUSTER_ADDRESS: cluster0.wf7oxaq.mongodb.net
