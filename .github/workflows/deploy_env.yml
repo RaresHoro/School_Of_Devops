@@ -11,7 +11,7 @@ env:
 jobs:
   test:
     env:
-        MONGO_DB_CLUSTER_ADDRESS: cluster0.lgc9edv.mongodb.net
+        MONGODB_CLUSTER_ADDRESS: cluster0.lgc9edv.mongodb.net
         MONGODB_USERNAME: rares
         MONGODB_PASSWORD: 4lazbGFOWXAE3iJA
         PORT: 3000
