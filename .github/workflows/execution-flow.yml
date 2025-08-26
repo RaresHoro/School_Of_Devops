@@ -4,14 +4,14 @@ on:
     branches:
       - main
     paths:
-      - 'CI_CD_SOD/Github-Actions/Condition Project/**'
+      - 'CI_CD_SOD/Github-Actions/Condition_Project/**'
       - '.github/workflows/execution-flow.yml'
 jobs:
   lint:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "CI_CD_SOD/Github-Actions/Condition Project"
+        working-directory: "CI_CD_SOD/Github-Actions/Condition_Project"
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "CI_CD_SOD/Github-Actions/Condition Project"
+        working-directory: "CI_CD_SOD/Github-Actions/Condition_Project"
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -49,13 +49,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: test.json
+          path: CI_CD_SOD/Github-Actions/Condition_Project/test.json
   build:
     needs: test
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "CI_CD_SOD/Github-Actions/Condition Project"
+        working-directory: "CI_CD_SOD/Github-Actions/Condition_Project"
     steps:
       - name: Get code
         uses: actions/checkout@v3
@@ -74,7 +74,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
-          path: CI_CD_SOD/Github-Actions/Condition Project/dist
+          path: CI_CD_SOD/Github-Actions/Condition_Project/dist
   deploy:
     needs: build
     runs-on: ubuntu-latest
