@@ -12,8 +12,8 @@ jobs:
   test:
     env:
         MONGODB_CLUSTER_ADDRESS: cluster0.lgc9edv.mongodb.net
-        MONGODB_USERNAME: rares
-        MONGODB_PASSWORD: 4lazbGFOWXAE3iJA
+        MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
         PORT: 3000
     defaults:
       run:
@@ -27,8 +27,6 @@ jobs:
         with:
           path: ~/.npm
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
-      - name: list env
-        run: printenv
       - name: Install dependencies
         run: npm ci
       - name: Run server
