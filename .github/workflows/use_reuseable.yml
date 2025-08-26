@@ -1,4 +1,4 @@
-name: Use reusable Workflow
+name: Use reusable Workflow 1
 on:
   push:
     branches:
@@ -6,6 +6,7 @@ on:
     paths:
       - 'CI_CD_SOD/Github-Actions/Condition_Project/**'
       - '.github/workflows/use_reuseable.yml'
+      - '.github/workflows/reusable.yml'
 jobs:
   lint:
     runs-on: ubuntu-latest
