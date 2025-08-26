@@ -8,6 +8,8 @@ const dbName = process.env.MONGODB_DB_NAME;
 const uri = `mongodb+srv://${dbUser}:${dbPassword}@${clusterAddress}/?retryWrites=true&w=majority`;
 
 
+console.log('Trying to connect to db');
+
 const client = new MongoClient(uri, { serverSelectionTimeoutMS: 15000 });
 
 async function connectMongo() {
@@ -25,3 +27,7 @@ async function connectMongo() {
 }
 
 await connectMongo();
+
+const database = client.db(dbName);
+
+export default database;
