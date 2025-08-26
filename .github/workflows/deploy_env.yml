@@ -7,7 +7,7 @@ on:
       - 'CI_CD_SOD/Github-Actions/Env Project/**'
       - '.github/workflows/deploy_env.yml'
 env:
-  MONGO_DB_NAME: sample_mflix
+  MONGO_DB_NAME: gha_admin
 jobs:
   test:
     defaults:
