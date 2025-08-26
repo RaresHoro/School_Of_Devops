@@ -1,4 +1,4 @@
-name: Deployment
+name: Deployment custom action
 on:
   push:
     branches: [main]
