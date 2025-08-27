@@ -1,0 +1,95 @@
+name: Build, Run, Smoke Test (multi-job, self-hosted)
+
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on:
+      - self-hosted
+      - laptop-horo
+    outputs:
+      image_tag: ${{ steps.set_tag.outputs.tag }}
+      container_name: ${{ steps.set_name.outputs.name }}
+    env:
+      IMAGE_NAME: school_of_devops-nginx
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: set_tag
+        run: echo "tag=gha-${{ github.run_id }}" >> $GITHUB_OUTPUT
+
+      - name: Set container name
+        id: set_name
+        run: echo "name=schoolofdevops-gha-${{ github.run_id }}" >> $GITHUB_OUTPUT
+
+      - name: Build Docker image
+        run: |
+          set -e
+          docker build \
+            -t "${IMAGE_NAME}:${{ steps.set_tag.outputs.tag }}" \
+            -f Containers_SOD/nginx-alpine-site/Dockerfile \
+            Containers_SOD/nginx-alpine-site
+          docker images | grep "${IMAGE_NAME}"
+
+  run:
+    runs-on:
+      - self-hosted
+      - laptop-horo
+    needs: build
+    env:
+      IMAGE_NAME: school_of_devops-nginx
+      IMAGE_TAG: ${{ needs.build.outputs.image_tag }}
+      CONTAINER_NAME: ${{ needs.build.outputs.container_name }}
+      HOST_PORT: "80"
+      CONTAINER_PORT: "80"
+    steps:
+      - name: Run container
+        run: |
+          docker rm -f "${CONTAINER_NAME}" || true
+          INUSE=$(docker ps -q --filter "publish=${HOST_PORT}")
+          [ -n "$INUSE" ] && docker rm -f $INUSE || true
+          docker run -d --name "${CONTAINER_NAME}" \
+            -p "${HOST_PORT}:${CONTAINER_PORT}" \
+            "${IMAGE_NAME}:${IMAGE_TAG}"
+          docker ps | grep "${CONTAINER_NAME}"
+
+  smoke-test:
+    runs-on:
+      - self-hosted
+      - laptop-horo
+    needs: run
+    env:
+      CONTAINER_NAME: ${{ needs.build.outputs.container_name }}
+      SITE_HOST: www.schoolofdevops.ro
+    steps:
+      - name: Smoke test
+        run: |
+          set -e
+          ATTEMPTS=5
+          for i in $(seq 1 $ATTEMPTS); do
+            echo "Smoke test attempt $i/$ATTEMPTS..."
+            docker exec "${CONTAINER_NAME}" sh -c "apk add --no-cache curl >/dev/null 2>&1 || true"
+            CODE=$(docker exec "${CONTAINER_NAME}" sh -c \
+              "curl -s -o /dev/null -w '%{http_code}' -H 'Host: ${SITE_HOST}' http://127.0.0.1:80" || echo 000)
+            if [ "$CODE" = "200" ]; then
+              echo "OK: HTTP 200"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "test failed"
+          exit 1
+
+  cleanup:
+    runs-on:
+      - self-hosted
+      - laptop-horo
+    if: always()
+    needs: [build, run, smoke-test]
+    env:
+      CONTAINER_NAME: ${{ needs.build.outputs.container_name }}
+    steps:
+      - name: Remove container
+        run: docker rm -f "${CONTAINER_NAME}" || true
