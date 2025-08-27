@@ -59,7 +59,7 @@ jobs:
     runs-on:
       - self-hosted
       - laptop-horo
-    needs: run
+    needs: [build,run]
     env:
       CONTAINER_NAME: ${{ needs.build.outputs.container_name }}
       SITE_HOST: www.schoolofdevops.ro
@@ -81,15 +81,3 @@ jobs:
           done
           echo "test failed"
           exit 1
-
-  cleanup:
-    runs-on:
-      - self-hosted
-      - laptop-horo
-    if: always()
-    needs: [build, run, smoke-test]
-    env:
-      CONTAINER_NAME: ${{ needs.build.outputs.container_name }}
-    steps:
-      - name: Remove container
-        run: docker rm -f "${CONTAINER_NAME}" || true
