@@ -3,20 +3,23 @@ on:
   issues:
     types:
       - opened
+permissions:
+  issues: write
+
 jobs:
-  assign-label:
-    permissions:
-      issues: write
+  label:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign label
-        if: contains(github.event.issue.title, 'bug')
+      - uses: actions/checkout@v4
+      - name: Add "bug" label to issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          curl -X POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels \
-          -H 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          -H 'content-type: application/json' \
-          -d '{
-              "labels": ["bug"]
-            }' \
-          --fail
+          curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -H "User-Agent: gha" \
+            https://api.github.com/repos/RaresHoro/School_Of_Devops/issues/4/labels \
+            -d '{"labels":["bug"]}' \
+          | jq .
