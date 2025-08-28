@@ -6,21 +6,19 @@ executors:
     docker:
       - image: cimg/base:stable
     resource_class: medium
+    environment:
+      DOCKER_CONTEXT: "Containers_SOD/nginx-alpine-site"
+      DOCKERFILE: "Containers_SOD/nginx-alpine-site/Dockerfile"
+      REPO_NAME: "nginx-site"
+      SITE_HOST: "www.schoolofdevops.ro"
+      HOST_PORT: "8080"                   # safer than 80 in CI
+      CONTAINER_PORT: "80"
 
-# Shared variables
-variables: &vars
-  DOCKER_CONTEXT: "Containers_SOD/nginx-alpine-site"
-  DOCKERFILE: "Containers_SOD/nginx-alpine-site/Dockerfile"
-  REPO_NAME: "nginx-site"
-  SITE_HOST: "www.schoolofdevops.ro"
-  HOST_PORT: "8080"                         # safer than 80 in CI
-  CONTAINER_PORT: "80"
+
 
 jobs:
   build-image:
     executor: docker-exec
-    environment:
-      <<: *vars
     steps:
       - checkout
       - run:
@@ -95,12 +93,12 @@ jobs:
               CODE=$(docker exec "${CONTAINER_NAME}" sh -c \
                 "curl -s -o /dev/null -w '%{http_code}' -H 'Host: ${SITE_HOST}' http://127.0.0.1:80" || echo 000)
               if [ "$CODE" = "200" ]; then
-                echo "✅ Smoke test passed"
+                echo "Smoke test passed"
                 break
               fi
               sleep 2
             done
-            [ "$CODE" = "200" ] || { echo "❌ Smoke test failed"; exit 1; }
+            [ "$CODE" = "200" ] || { echo "Smoke test failed"; exit 1; }
 
       - run:
           name: Cleanup container
