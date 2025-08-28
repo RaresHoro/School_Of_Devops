@@ -127,14 +127,14 @@ jobs:
             docker load -i /tmp/img/image.tar
             docker push "${IMAGE}:${TAG}"
 
-workflows:
-  build_test_push:
-    jobs:
-      - build-image:
-          filters:
-            branches:
-              only: main
-      - smoke-test:
-          requires: [build-image]
-      - push-image:
-          requires: [smoke-test]
+# workflows:
+#   build_test_push:
+#     jobs:
+#       - build-image:
+#           filters:
+#             branches:
+#               only: main
+#       - smoke-test:
+#           requires: [build-image]
+#       - push-image:
+#           requires: [smoke-test]
