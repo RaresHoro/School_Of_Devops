@@ -1,11 +1,9 @@
 trigger: none
 
-
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-
   IMAGE_NAME: 'school_of_devops-nginx'
   IMAGE_TAG: 'ado-$(Build.BuildId)'
   HOST_PORT: '8080'
@@ -13,20 +11,22 @@ variables:
   CONTAINER_NAME: 'schoolofdevops-ado-$(Build.BuildId)'
   SITE_HOST: 'www.schoolofdevops.ro'
 
-
   ACR_NAME: 'sampleReg12345'
   REGISTRY: 'samplereg12345.azurecr.io'
   REMOTE_IMAGE: '$(REGISTRY)/$(IMAGE_NAME):$(IMAGE_TAG)'
 
 stages:
 - stage: BuildTestPush
-  displayName: 'Build, Smoke Test, Push'
+  displayName: 'Build, Test, Push'
   jobs:
-  - job: docker_job
-    displayName: 'Build, Test, Push to ACR'
+
+  # -------------------------
+  # Job 1: Build & publish tar
+  # -------------------------
+  - job: Build
+    displayName: 'Build Docker image'
     steps:
     - checkout: self
-
 
     - script: |
         set -e
@@ -35,40 +35,87 @@ stages:
           -f Containers_SOD/nginx-alpine-site/Dockerfile \
           Containers_SOD/nginx-alpine-site
         docker images | grep $(IMAGE_NAME)
-      displayName: 'Build Docker image'
+      displayName: 'Docker build'
 
+    # Save the image as a tar so next jobs can use it
+    - script: |
+        set -e
+        mkdir -p /tmp/img
+        docker save $(IMAGE_NAME):$(IMAGE_TAG) -o /tmp/img/image.tar
+        ls -lh /tmp/img/image.tar
+      displayName: 'Save image as tar'
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '/tmp/img/image.tar'
+        artifact: 'image-tar'
+        publishLocation: 'pipeline'
+      displayName: 'Publish image artifact'
+
+  # -------------------------
+  # Job 2: Smoke test
+  # -------------------------
+  - job: Test
+    displayName: 'Run container & smoke test'
+    dependsOn: Build
+    steps:
+    - download: current
+      artifact: image-tar
+      displayName: 'Download image artifact'
 
     - script: |
         set -e
+        docker load -i "$(Pipeline.Workspace)/img/image.tar"
         docker rm -f $(CONTAINER_NAME) || true
-        INUSE=$(docker ps -q --filter "publish=$(HOST_PORT)")
-        [ -n "$INUSE" ] && docker rm -f $INUSE || true
 
-        docker run -d --name $(CONTAINER_NAME) -p $(HOST_PORT):$(CONTAINER_PORT) \
+        # Run fresh container (note: no port sweeping; only manage our own container)
+        docker run -d --name $(CONTAINER_NAME) \
+          -p $(HOST_PORT):$(CONTAINER_PORT) \
           $(IMAGE_NAME):$(IMAGE_TAG)
-        docker ps | grep $(CONTAINER_NAME)
-      displayName: 'Run container locally'
 
+        docker ps | grep $(CONTAINER_NAME)
+      displayName: 'Run container'
 
     - script: |
         set -e
         ATTEMPTS=5
         for i in $(seq 1 $ATTEMPTS); do
           echo "Smoke test attempt $i/$ATTEMPTS..."
-          docker exec $(CONTAINER_NAME) sh -c "apk add --no-cache curl >/dev/null 2>&1 || true"
-          CODE=$(docker exec $(CONTAINER_NAME) sh -c \
-            "curl -s -o /dev/null -w '%{http_code}' -H 'Host: $(SITE_HOST)' http://127.0.0.1:80" || echo 000)
+          # Use a sidecar curl so we don't apk add inside your image
+          CODE=$(docker run --rm --network container:$(CONTAINER_NAME) curlimages/curl:8.7.1 \
+            -s -o /dev/null -w '%{http_code}' -H "Host: $(SITE_HOST)" http://127.0.0.1:80 || echo 000)
           if [ "$CODE" = "200" ]; then
             echo "OK: HTTP 200"
-            exit 0
+            PASS=1
+            break
           fi
           sleep 2
         done
-        echo "Smoke test failed" && exit 1
-      displayName: 'Smoke test (retry)'
+
+        # Cleanup container
+        docker rm -f $(CONTAINER_NAME) || true
+
+        [ "$PASS" = "1" ] || { echo "Smoke test failed"; exit 1; }
+      displayName: 'Smoke test (sidecar curl)'
+
+  # -------------------------
+  # Job 3: Push to ACR
+  # -------------------------
+  - job: Push
+    displayName: 'Tag & push to ACR'
+    dependsOn: Test
+    steps:
+    - download: current
+      artifact: image-tar
+      displayName: 'Download image artifact'
+
+    - script: |
+        set -e
+        docker load -i "$(Pipeline.Workspace)/img/image.tar"
+      displayName: 'Load image'
 
     - task: AzureCLI@2
-      displayName: 'Push image to ACR'
+      displayName: 'Login & push to ACR'
       inputs:
         azureSubscription: 'conn-horo'
         scriptType: bash
@@ -76,6 +123,6 @@ stages:
         inlineScript: |
           set -e
           az acr login -n $(ACR_NAME)
-          echo "Tagging & pushing $(IMAGE_NAME):$(IMAGE_TAG) -> $(REMOTE_IMAGE)"
+          echo "Tagging $(IMAGE_NAME):$(IMAGE_TAG) -> $(REMOTE_IMAGE)"
           docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(REMOTE_IMAGE)
           docker push $(REMOTE_IMAGE)
