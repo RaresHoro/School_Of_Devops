@@ -47,7 +47,7 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '/tmp/img/image.tar'
+        targetPath: '/tmp/img'
         artifact: 'image-tar'
         publishLocation: 'pipeline'
       displayName: 'Publish image artifact'
