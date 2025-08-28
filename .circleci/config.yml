@@ -43,15 +43,15 @@ jobs:
 
             mkdir -p /tmp/img
             docker save "${IMAGE}:${TAG}" -o /tmp/img/image.tar
-            cat > /tmp/img/meta.env <<EOF
-            IMAGE=${IMAGE}
-            TAG=${TAG}
-            REPO_NAME=${REPO_NAME}
-            SITE_HOST=${SITE_HOST}
-            HOST_PORT=${HOST_PORT}
-            CONTAINER_PORT=${CONTAINER_PORT}
-            CONTAINER_NAME=schoolofdevops-${CIRCLE_SHA1:0:12}
-            EOF
+            {
+              echo "IMAGE=${IMAGE}"
+              echo "TAG=${TAG}"
+              echo "REPO_NAME=${REPO_NAME}"
+              echo "SITE_HOST=${SITE_HOST}"
+              echo "HOST_PORT=${HOST_PORT}"
+              echo "CONTAINER_PORT=${CONTAINER_PORT}"
+              echo "CONTAINER_NAME=schoolofdevops-${CIRCLE_SHA1:0:12}"
+            } > /tmp/img/meta.env
 
       - persist_to_workspace:
           root: /tmp
