@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    environment {
+        def myString = "Hello, World!"
+        def myNumber = 42
+        def myBoolean = true
+    }
+
+    stages {
+        stage('Print Variables') {
+            steps {
+                echo "String Variable: ${myString}\n"
+                echo "Number Variable: ${myNumber}\n"
+                echo "Boolean Variable: ${myBoolean}\n"
+            }
+        }
+    }
+}

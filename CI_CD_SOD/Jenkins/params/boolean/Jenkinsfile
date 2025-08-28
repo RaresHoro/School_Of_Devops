@@ -1,0 +1,23 @@
+pipeline{
+    agent any
+
+    parameters {
+        booleanParam(name: "myBoolean", defaultValue: false, description: 'Enable Service?')
+    }
+
+    stages{
+        stage("Demo"){
+            steps{
+                script {
+                    if(params.myBoolean == false){
+                        currentBuild.result = 'SUCCESS'
+                        return
+                    }else{
+                        echo "Boolean Parameter is set to true, proceeding with the build."
+                    }
+                }
+                echo  "booleanParam is set to : ${params.myBoolean}"
+            }
+        }
+    }
+}

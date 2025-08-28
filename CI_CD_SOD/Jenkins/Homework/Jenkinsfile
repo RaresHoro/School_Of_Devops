@@ -1,0 +1,26 @@
+pipeline{
+    agent any
+
+    environment{
+        IMAGE_NAME = "school_of_devops-nginx"
+        IMAGE_TAG = "jenkins:${env.BUILD_ID}"
+        HOST_PORT    = "80"
+        CONTAINER_PORT = "80"
+        CONTAINER_NAME = "schoolofdevops-container"
+        SITE_HOST    = "www.schoolofdevops.ro"
+        SITE_URL     = "http://127.0.0.1"
+    }
+    stages{
+        stage('Checkout') {
+            steps { checkout scm }
+        }
+        stage("Build Image"){
+            steps{
+                script {
+                    docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
+                    sh "docker images | grep ${IMAGE_NAME}"
+                }
+            }
+        }
+    }
+}
