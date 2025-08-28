@@ -10,7 +10,6 @@ executors:
 jobs:
   build-and-push:
     executor: docker-exec
-    working_directory: ~/project/Containers_SOD/nginx-alpine-site
     steps:
       - checkout
       - run:
@@ -29,7 +28,10 @@ jobs:
           name: Build & push image
           command: |
             IMAGE="${DOCKERHUB_USERNAME}/nginx-site:latest"
-            docker build -t "$IMAGE" .
+            docker build \
+              -f Containers_SOD/nginx-alpine-site/Dockerfile \
+              -t "$IMAGE" \
+              Containers_SOD/nginx-alpine-site
             docker push "$IMAGE"
 
 workflows:
