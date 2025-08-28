@@ -37,7 +37,7 @@ stages:
         docker images | grep $(IMAGE_NAME)
       displayName: 'Docker build'
 
-    # Save the image as a tar so next jobs can use it
+
     - script: |
         set -e
         mkdir -p /tmp/img
@@ -47,8 +47,9 @@ stages:
 
     - task: PublishPipelineArtifact@1
       inputs:
-        targetPath: '/tmp/img/image.tar'
+        targetPath: '/tmp/img'
         artifact: 'image-tar'
+
         publishLocation: 'pipeline'
       displayName: 'Publish image artifact'
 
