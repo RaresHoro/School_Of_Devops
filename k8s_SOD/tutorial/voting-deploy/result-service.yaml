@@ -5,11 +5,10 @@ metadata:
   labels:
     app: result
 spec:
-  type: NodePort
-  ports:
-    - name: "result-service"
-      port: 8081
-      targetPort: 80
-      nodePort: 31001
+  type: LoadBalancer
   selector:
     app: result
+  ports:
+    - port: 8081
+      targetPort: 80
+      protocol: TCP

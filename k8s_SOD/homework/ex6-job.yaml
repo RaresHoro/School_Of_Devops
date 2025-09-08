@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: curl-job
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: curl-container
+          image: curlimages/curl:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              URL="http://echo-service.playground.svc.cluster.local/"
+              if curl "$URL" >/dev/null; then
+                echo "Network Policy failed! I shouldn't be allowed!"
+              else
+                echo "Network Policy works! Echo is safe <3"
+              fi
+              exit 0
+

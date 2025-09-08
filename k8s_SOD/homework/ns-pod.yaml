@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: playground
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: nginx
+    # full image path (registry/repo/image:tag)
+    image: docker.io/library/nginx:latest
+    ports:
+    - containerPort: 80
+    env:
+    - name: ENV
+      value: test

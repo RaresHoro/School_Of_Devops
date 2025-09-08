@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ex3-deploy
+  namespace: playground
+  labels:
+    app: ex3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ex3
+  template:
+        metadata:
+          labels:
+            app: ex3
+        spec:
+          containers:
+            - name: echo
+              image: header-echo:v2
+              ports:
+                - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ex3-service
+  namespace: playground
+  labels:
+    app: ex3
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 31001
+  selector:
+    app: ex3
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ex3-lb
+  namespace: playground
+  labels:
+    app: ex3
+spec:
+  type: LoadBalancer
+  selector:
+    app: ex3
+  ports:
+    - port: 8080
+      targetPort: 8080
+

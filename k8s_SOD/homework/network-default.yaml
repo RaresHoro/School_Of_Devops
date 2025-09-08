@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: network-policy-default
+  namespace: playground
+spec:
+  podSelector:
+    matchLabels:
+      app: echo
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: default
+      podSelector:
+            matchLabels:
+              app: nginx
+    ports:
+      - protocol: TCP
+        port: 80

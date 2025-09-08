@@ -288,3 +288,78 @@ Kubernetes is a robust system for container orchestration, offering:
 * Extensible ecosystem with CRDs and operators
 
 
+# Kubernetes Persistent Volumes (PVs) and Persistent Volume Claims (PVCs)
+
+## Persistent Volume Claims (PVCs)
+
+- **Reservation of PVs**
+  - A PVC reserves a Persistent Volume (PV).
+  - Once a PV is bound to a claim, it **cannot be bound to another claim**.
+
+- **Capacity mismatch**
+  - A PV can have extra unused capacity.
+  - Example: if PVC requests 1 Gi and PV provides 10 Gi, then 9 Gi remain unused (for static provisioning).
+
+- **Reclamation policies** (what happens when a PVC is deleted):
+  - `Retain`: the volume and its data are kept, admin must clean up manually.
+  - `Delete`: the underlying storage is deleted when the PVC is released.
+
+- **Access Modes**
+  - **ReadWriteOnce (RWO)**: Volume can be mounted as read-write by a single node.
+  - **ReadOnlyMany (ROX)**: Volume can be mounted read-only by many nodes.
+  - **ReadWriteMany (RWX)**: Volume can be mounted as read-write by many nodes.
+  - **ReadWriteOncePod (RWOP)**: Volume can be mounted read-write by a single Pod (newer mode).
+
+---
+
+## Provisioning
+
+- **Static provisioning**
+  - Admin creates PVs beforehand.
+  - PVCs are bound by best-effort match based on access mode and size requests.
+
+- **Dynamic provisioning**
+  - A StorageClass provisions storage dynamically.
+  - The PVC is created first, and then a matching PV is provisioned automatically.
+
+---
+
+## Shared vs. Per-Pod Storage
+
+- **Deployments**
+  - Can use a **single PVC shared** by all Pods.
+  - Good for:
+    - Logs
+    - Shared caches
+    - File uploads
+
+- **StatefulSets**
+  - Optimized for **per-Pod PVCs**.
+  - Suitable for:
+    - Databases (MySQL, PostgreSQL, MongoDB)
+    - Message brokers (Kafka, RabbitMQ)
+    - Distributed storage systems
+
+---
+
+## Choosing Between Deployment + PVC vs StatefulSet
+
+- **Use PV + PVC with a Deployment when**:
+  - You want simple persistence for an otherwise stateless app (e.g., file uploads, shared cache).
+  - Multiple Pods can mount the same volume (RWX).
+  - Stable Pod names are not important.
+
+- **Use StatefulSet (with PVCs) when**:
+  - Each Pod needs its own dedicated storage (e.g., DB replicas, Kafka).
+  - The app depends on **stable network identity**.
+
+---
+
+## Key Insight
+
+- **Not all apps are stateful**:
+  Many workloads (e.g., web apps, APIs, workers) don’t need per-Pod identity or stable storage. For these, a **Deployment + PVC** (shared or single) is simpler.
+
+- **Overhead**:
+  StatefulSets add complexity (ordered rollouts, stable Pod names).
+  If you just want persistence for a stateless app (like an Nginx serving static files), using a **D
