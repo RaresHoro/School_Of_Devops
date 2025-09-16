@@ -1,6 +1,6 @@
 # Blackbox vs Whitebox Monitoring
 
-## TL;DR
+
 
 * **Blackbox** = outside-in, synthetic checks against your endpoints (HTTP/TCP/ICMP/browser). Tells you **“can users reach it?”**
 * **Whitebox** = inside-out, instrumentation from your app & infra (metrics/logs/traces). Tells you **“what’s happening & why?”**
