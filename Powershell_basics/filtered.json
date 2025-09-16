@@ -1,0 +1,267 @@
+[
+  {
+    "_id": "68c8107fde07df073469ed85",
+    "isActive": true,
+    "name": "Kerri Conway",
+    "department": "Marketing",
+    "isManager": true,
+    "tags": [
+      "excepteur",
+      "officia",
+      "tempor",
+      "et",
+      "ipsum",
+      "sint",
+      "consequat"
+    ]
+  },
+  {
+    "_id": "68c8107faad79159d201d43a",
+    "isActive": true,
+    "name": "Guerrero Cummings",
+    "department": "Accounting",
+    "isManager": false,
+    "tags": [
+      "ullamco",
+      "exercitation",
+      "deserunt",
+      "incididunt",
+      "ad",
+      "adipisicing",
+      "laborum"
+    ]
+  },
+  {
+    "_id": "68c8107f871cb348b93650c8",
+    "isActive": true,
+    "name": "Blake Holloway",
+    "department": "Marketing",
+    "isManager": true,
+    "tags": [
+      "et",
+      "commodo",
+      "nisi",
+      "ullamco",
+      "ea",
+      "aliquip"
+    ]
+  },
+  {
+    "_id": "68c8107fc054673e2c84e9a0",
+    "isActive": true,
+    "name": "Jody Levine",
+    "department": "Research",
+    "isManager": false,
+    "tags": [
+      "Lorem",
+      "consequat",
+      "incididunt",
+      "ipsum"
+    ]
+  },
+  {
+    "_id": "68c8107fe5b30b6cb80c7323",
+    "isActive": true,
+    "name": "Carol Woodard",
+    "department": "Marketing",
+    "isManager": false,
+    "tags": [
+      "ipsum",
+      "esse",
+      "occaecat"
+    ]
+  },
+  {
+    "_id": "68c8107fedf9a3ddad427885",
+    "isActive": true,
+    "name": "Terri Massey",
+    "department": "Research",
+    "isManager": true,
+    "tags": [
+      "ipsum",
+      "ad",
+      "cillum",
+      "consequat",
+      "nostrud"
+    ]
+  },
+  {
+    "_id": "68c8107ffef3617b70093eec",
+    "isActive": true,
+    "name": "Donovan Barron",
+    "department": "Research",
+    "isManager": true,
+    "tags": [
+      "excepteur",
+      "eu",
+      "in",
+      "labore"
+    ]
+  },
+  {
+    "_id": "68c8107faaae284ed5e47876",
+    "isActive": true,
+    "name": "England Stevenson",
+    "department": "Research",
+    "isManager": false,
+    "tags": [
+      "non",
+      "tempor",
+      "officia",
+      "ipsum"
+    ]
+  },
+  {
+    "_id": "68c8107fafbce97551c46b1b",
+    "isActive": true,
+    "name": "Riggs Pollard",
+    "department": "Research",
+    "isManager": true,
+    "tags": [
+      "duis",
+      "ipsum",
+      "eiusmod",
+      "amet",
+      "consectetur",
+      "deserunt",
+      "deserunt"
+    ]
+  },
+  {
+    "_id": "68c8107f62ca25bc68ecb996",
+    "isActive": true,
+    "name": "Anita Best",
+    "department": "Marketing",
+    "isManager": true,
+    "tags": [
+      "labore",
+      "nisi",
+      "et"
+    ]
+  },
+  {
+    "_id": "68c8107f6749aa1740525416",
+    "isActive": true,
+    "name": "Macias Greer",
+    "department": "Marketing",
+    "isManager": false,
+    "tags": [
+      "deserunt",
+      "cillum",
+      "mollit",
+      "ullamco",
+      "eiusmod",
+      "minim"
+    ]
+  },
+  {
+    "_id": "68c8107f45db24a4a3458277",
+    "isActive": true,
+    "name": "Vargas Foley",
+    "department": "Research",
+    "isManager": true,
+    "tags": [
+      "anim",
+      "mollit",
+      "do",
+      "ullamco",
+      "reprehenderit",
+      "proident",
+      "culpa"
+    ]
+  },
+  {
+    "_id": "68c8107f9c54865561d4ab64",
+    "isActive": true,
+    "name": "Park Jordan",
+    "department": "Research",
+    "isManager": false,
+    "tags": [
+      "ullamco",
+      "ad",
+      "consectetur",
+      "nisi",
+      "id",
+      "et",
+      "esse"
+    ]
+  },
+  {
+    "_id": "68c8107fdec88b692fe8d278",
+    "isActive": true,
+    "name": "Hallie Singleton",
+    "department": "Development",
+    "isManager": false,
+    "tags": [
+      "ipsum",
+      "pariatur",
+      "non",
+      "consectetur",
+      "exercitation",
+      "consequat",
+      "labore"
+    ]
+  },
+  {
+    "_id": "68c8107f329167fe8467a2fd",
+    "isActive": true,
+    "name": "Oconnor Vargas",
+    "department": "Marketing",
+    "isManager": true,
+    "tags": [
+      "veniam",
+      "et",
+      "est",
+      "ex",
+      "ipsum",
+      "velit",
+      "sint"
+    ]
+  },
+  {
+    "_id": "68c8107f094ca1be5c83d82c",
+    "isActive": true,
+    "name": "Townsend Flores",
+    "department": "Development",
+    "isManager": true,
+    "tags": [
+      "in",
+      "ex",
+      "qui",
+      "elit",
+      "ullamco",
+      "do",
+      "occaecat"
+    ]
+  },
+  {
+    "_id": "68c8107f0b53fe225feb1be6",
+    "isActive": true,
+    "name": "Jackson Gallegos",
+    "department": "Accounting",
+    "isManager": true,
+    "tags": [
+      "commodo",
+      "laboris",
+      "ipsum",
+      "sint",
+      "eiusmod"
+    ]
+  },
+  {
+    "_id": "68c8107f5301b6009f0d6795",
+    "isActive": true,
+    "name": "Hilda Mullen",
+    "department": "Accounting",
+    "isManager": false,
+    "tags": [
+      "eiusmod",
+      "ullamco",
+      "officia",
+      "enim",
+      "exercitation",
+      "adipisicing",
+      "minim"
+    ]
+  }
+]

@@ -14,14 +14,14 @@
 # - MessageFromPipeline - this parameter may be provided through pipeline by it's name.
 [CmdletBinding()]
 param(
-    [Parameter()]
-    [object[]] $ParameterWithoutType,
+
+    $ParameterWithoutType,
 
     [Parameter()]
     [string] $ParameterWithType,
 
     [Parameter(Mandatory = $true)]
-    [object] $requiredParameter,
+    [object] $RequiredParameter,
 
 
     [Parameter(Mandatory = $false)]
@@ -86,9 +86,8 @@ Write-Host "###Parameter Values Passed to Script ###"
 Write-Host "ParameterWithoutType   : $ParameterWithoutType"
 Write-Host "ParameterWithType      : $ParameterWithType"
 Write-Host "RequiredParameter      : $RequiredParameter"
-Write-Host "MessageWithDefaultValue: $MessageWithDefaultValue"
+Write-Host "Your message is `"$MessageWithDefaultValue`". Cheers!"
 Write-Host "Message5to15           : $Message5to15"
-Write-Host "MessageWithSoD         : $MessageWithSoD"
 Write-Host "DateFrom               : $DateFrom"
 Write-Host "DateTo                 : $DateTo"
 Write-Host "EndavaPurposeAndValues : $EndavaPurposeAndValues"

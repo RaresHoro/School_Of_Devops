@@ -78,7 +78,7 @@
 .\Resolve-PowershellTask3A.ps1 -RequiredParameter 1 -EndavaPurposeAndValues Smart
 
 # override default
-.\Resolve-PowershellTask3A.ps1 -RequiredParameter 1 -EndavaPurposeAndValues Smart -MessageWithDefaultValue "Keep learning!"
+.\Resolve-PowershellTask3A.ps1 -RequiredParameter 1 -EndavaPurposeAndValues Smart -MessageWithDefaultValue "Unu Doi Trei"
 ```
 
 **Expect:**
