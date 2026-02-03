@@ -1,0 +1,23 @@
+# Since the language and version are unknown, using a generic base image
+FROM alpine:latest
+
+# Create a non-root user
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the application code
+COPY . .
+
+# Set the user to the non-root user
+USER appuser
+
+# Expose a default port (change as necessary)
+EXPOSE 8080
+
+# Add a basic healthcheck (customize as needed)
+HEALTHCHECK CMD curl --fail http://localhost:8080 || exit 1
+
+# Command to run the application (customize as needed)
+CMD ["sh"]
